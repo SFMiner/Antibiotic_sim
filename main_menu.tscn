@@ -1,0 +1,10 @@
+[gd_scene load_steps=6 format=3 uid="uid:mainsim"]
+
+[ext_resource type="Script" path="res://main.gd" id="1"]    # ✅ corrected
+[ext_resource type="PackedScene" path="res://organism.tscn" id="2"]
+[ext_resource type="Script" path="res://graph_display.gd" id="3"]
+
+[node name="Main" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
