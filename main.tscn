@@ -73,6 +73,20 @@ layout_mode = 2
 layout_mode = 2
 text = "Next Cycle"
 
+[node name="Spacer2" type="Container" parent="UI/Buttons"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="AutoCycleCheckbox" type="CheckBox" parent="UI/Buttons"]
+layout_mode = 2
+text = "Auto Cycle"
+
+[node name="AutoCycleLabel" type="Label" parent="UI/Buttons"]
+layout_mode = 2
+text = "(5 sec)"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 10
+
 [node name="TopPanel" type="PanelContainer" parent="UI"]
 offset_right = 40.0
 offset_bottom = 40.0
@@ -213,27 +227,6 @@ theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_272bh")
 text = "Start Simulation"
 
-[node name="BacteriaLayer" type="Node2D" parent="."]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-
-[node name="ZombieStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("5_272bh")
-volume_db = -10.0
-parameters/looping = true
-
-[node name="ZombieStreamPlayer2" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("6_5vw27")
-volume_db = -12.508
-autoplay = true
-parameters/looping = true
-
-[node name="ZombieStreamPlayer3" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("7_kek77")
-volume_db = -15.301
-autoplay = true
-parameters/looping = true
-
 [node name="SuccessScreen" type="Node2D" parent="UI"]
 visible = false
 
@@ -248,10 +241,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -200.0
-offset_right = 400.0
-offset_bottom = 200.0
+offset_left = 192.0
+offset_top = 126.0
+offset_right = 992.0
+offset_bottom = 526.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/SuccessScreen/PanelContainer"]
 layout_mode = 2
@@ -259,9 +254,9 @@ alignment = 1
 
 [node name="Title" type="Label" parent="UI/SuccessScreen/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "HORDE ELIMINATED!"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 40
 
 [node name="Message" type="Label" parent="UI/SuccessScreen/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -286,3 +281,24 @@ text = "Restart (Regular Mode)"
 [node name="SandboxButton" type="Button" parent="UI/SuccessScreen/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Sandbox Mode"
+
+[node name="BacteriaLayer" type="Node2D" parent="."]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="ZombieStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_272bh")
+volume_db = -10.0
+parameters/looping = true
+
+[node name="ZombieStreamPlayer2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_5vw27")
+volume_db = -12.508
+autoplay = true
+parameters/looping = true
+
+[node name="ZombieStreamPlayer3" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_kek77")
+volume_db = -15.301
+autoplay = true
+parameters/looping = true

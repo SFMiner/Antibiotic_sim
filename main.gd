@@ -60,6 +60,8 @@ const ORDNANCE_UNLOCK_INTERVAL := 10
 @onready var regular_restart_button: Button = $UI/SuccessScreen/PanelContainer/VBoxContainer/HBoxContainer/RegularButton
 @onready var sandbox_restart_button: Button = $UI/SuccessScreen/PanelContainer/VBoxContainer/HBoxContainer/SandboxButton
 
+@onready var auto_cycle_checkbox: CheckBox = $UI/Buttons/AutoCycleCheckbox
+
 # Zombie horde
 var population: Array = []
 # Current infection cycle number
@@ -71,6 +73,10 @@ var cycle_stats: Array = []
 # Game mode: true for sandbox (all ordnance available), false for regular (staged unlock)
 # Using static so it persists across scene reloads
 static var sandbox_mode := false
+
+# Auto-cycle timer management
+var auto_cycle_timer: Timer = null
+const AUTO_CYCLE_DELAY := 5.0  # Seconds before auto-advancing to next cycle
 
 var antibiotic_config = preload("res://antibiotics_config.gd")
 var genetic_system = preload("res://genetic_system.gd")
@@ -155,6 +161,8 @@ func _spawn_initial_population():
 
 func _next_generation():
 	print("DEBUG: Next Generation button clicked!")
+	# Cancel any pending auto-cycle timer
+	_cancel_auto_cycle_timer()
 	generation += 1
 
 	# Check if new ordnance unlocked at this cycle
@@ -278,6 +286,10 @@ func _apply_antibiotic(name: String):
 	_update_stats_display()
 	_check_victory()
 
+	# Start auto-cycle timer if enabled
+	if auto_cycle_checkbox.button_pressed:
+		_start_auto_cycle_timer()
+
 func _update_ui():
 	gen_label.text = "Infection Cycle: %d" % generation
 	pop_label.text = "Zombie Count: %d" % population.size()
@@ -320,3 +332,28 @@ func _restart_game(sandbox: bool):
 	# Set game mode and reload the scene
 	sandbox_mode = sandbox
 	get_tree().reload_current_scene()
+
+func _start_auto_cycle_timer():
+	# Create and start a timer that will trigger next generation after delay
+	_cancel_auto_cycle_timer()  # Cancel any existing timer first
+
+	auto_cycle_timer = Timer.new()
+	add_child(auto_cycle_timer)
+	auto_cycle_timer.wait_time = AUTO_CYCLE_DELAY
+	auto_cycle_timer.one_shot = true
+	auto_cycle_timer.timeout.connect(_on_auto_cycle_timeout)
+	auto_cycle_timer.start()
+	print("Auto-cycle timer started: %d seconds" % int(AUTO_CYCLE_DELAY))
+
+func _cancel_auto_cycle_timer():
+	# Cancel the auto-cycle timer if it exists
+	if auto_cycle_timer != null and is_instance_valid(auto_cycle_timer):
+		auto_cycle_timer.queue_free()
+		auto_cycle_timer = null
+		print("Auto-cycle timer cancelled")
+
+func _on_auto_cycle_timeout():
+	# Timer finished, advance to next generation
+	print("Auto-cycle timer completed, advancing to next cycle")
+	auto_cycle_timer = null
+	_next_generation()
