@@ -47,7 +47,6 @@ offset_left = 811.0
 offset_top = 65.0
 offset_right = 921.0
 offset_bottom = 79.0
-theme_override_font_sizes/font_size = 10
 text = "(5 sec)"
 horizontal_alignment = 1
 
@@ -231,10 +230,6 @@ offset_left = 487.0
 offset_top = 588.0
 offset_right = 677.0
 offset_bottom = 619.0
-theme_override_constants/outline_size = 4
-theme_override_fonts/font = ExtResource("4_lquwl")
-theme_override_font_sizes/font_size = 21
-theme_override_styles/normal = SubResource("StyleBoxFlat_272bh")
 text = "Start Simulation"
 
 [node name="SuccessScreen" type="Node2D" parent="UI"]
