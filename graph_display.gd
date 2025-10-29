@@ -1,26 +1,27 @@
 extends Control
 
+# Ordnance toughness graph colors (matches organism color families)
 const COLORS = {
-	"Augmentin": Color(0.7, 0.6, 0.8),
-	"Cephalexin-1": Color(0.9, 0.4, 0.5),
-	"Cephalexin-2": Color(0.9, 0.6, 0.4),
-	"Tetracycline": Color(0.7, 0.8, 0.4),
-	"Ciprofloxacin": Color(0.4, 0.6, 0.9)
+	"Fire": Color(0.9, 0.4, 0.3),
+	"Shrapnel": Color(0.567, 0.148, 0.616, 1.0),
+	"Acid": Color(0.5, 0.8, 0.4),
+	"Electricity": Color(0.59, 0.648, 0.0, 1.0),
+	"Freeze": Color(0.5, 0.75, 0.95)
 }
 
-var history := []  # Each entry: { "antibiotic": String, "avg_level": float }
+var history := []  # Each entry: { "ordnance": String, "avg_toughness": float }
 
 func update_graph(population: Array):
 	var avg = {}
-	for name in COLORS.keys():
-		avg[name] = 0.0
+	for ord_name in COLORS.keys():
+		avg[ord_name] = 0.0
 	if population.size() == 0:
 		queue_redraw()
 		return
 	for org in population:
-		for name in COLORS.keys():
+		for ord_name in COLORS.keys():
 			avg[name] += org.resistances[name]
-	for name in COLORS.keys():
+	for ord_name in COLORS.keys():
 		avg[name] /= float(population.size())
 	history.append(avg)
 	if history.size() > 100:
@@ -30,7 +31,7 @@ func update_graph(population: Array):
 func _draw():
 	var step_x = size.x / max(1, history.size())
 	for i in range(1, history.size()):
-		for name in COLORS.keys():
+		for ord_name in COLORS.keys():
 			var c = COLORS[name]
 			var y_prev = size.y - (history[i - 1][name] * 50)
 			var y_cur = size.y - (history[i][name] * 50)

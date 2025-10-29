@@ -1,9 +1,35 @@
-[gd_scene load_steps=2 format=3 uid="uid://3fwsox1rn42e"]
+[gd_scene load_steps=7 format=3 uid="uid://3fwsox1rn42e"]
 
 [ext_resource type="Script" uid="uid://bk88fjknfug5y" path="res://organism.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://uiloxayqc286" path="res://zombi_walk1.png" id="2_k3u06"]
+[ext_resource type="Texture2D" uid="uid://sc6hn16xi20g" path="res://zombi_walk2.png" id="3_e40fp"]
+[ext_resource type="Texture2D" uid="uid://cki4hs8312tm5" path="res://zombi_walk3.png" id="4_15wmh"]
+[ext_resource type="Texture2D" uid="uid://dk742rul6doju" path="res://zombi_walk4.png" id="5_6gd3k"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vdjne"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_k3u06")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_e40fp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_15wmh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_6gd3k")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Organism" type="Node2D"]
 z_index = 10
 script = ExtResource("1")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_vdjne")

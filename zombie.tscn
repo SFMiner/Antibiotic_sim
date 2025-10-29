@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://v73pk7bchdjf"]
+
+[ext_resource type="Texture2D" uid="uid://uiloxayqc286" path="res://zombi_walk1.png" id="1_eseir"]
+[ext_resource type="Texture2D" uid="uid://sc6hn16xi20g" path="res://zombi_walk2.png" id="2_7nqyo"]
+[ext_resource type="Texture2D" uid="uid://cki4hs8312tm5" path="res://zombi_walk3.png" id="3_lnshm"]
+[ext_resource type="Texture2D" uid="uid://dk742rul6doju" path="res://zombi_walk4.png" id="4_x5rsa"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ogcpr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_eseir")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_7nqyo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_lnshm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_x5rsa")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Zombie" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_ogcpr")
+frame_progress = 0.43262443

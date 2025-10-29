@@ -8,7 +8,7 @@
 # [?] Cross-toughness (Shrapnel/Acid) functions
 # [X] Performance good with 1000 zombies
 # [X] No console errors or warnings
-# [ ] Statistics panel auto-scrolls to bottom
+# [X] Statistics panel auto-scrolls to bottom
 # [X] Toggle button switches between Show/Hide Stats
 
 extends Control
@@ -26,7 +26,7 @@ const START_POP := 400
 # Infection cycles between ordnance strikes (1 = every round)
 const GENERATIONS_PER_DOSE := 1
 # Base casualty rate from ordnance (without toughness)
-const BASE_DEATH_CHANCE := 0.5# 0.598
+const BASE_DEATH_CHANCE := 0.55 # 0.598
 # Random survivor defense per infection cycle (natural attrition)
 const SURVIVOR_DEFENSE := 15
 # Cycles between unlocking new ordnance types
@@ -93,6 +93,7 @@ func _ready() -> void:
 	cipro_button.pressed.connect(func(): _apply_antibiotic(cipro_button.text))
 	next_gen_button.pressed.connect(_next_generation)
 	start_button.pressed.connect(_start_game)
+	title_page.visible = true
 
 	# Statistics panel toggle
 	stats_toggle.pressed.connect(_toggle_stats_panel)
@@ -252,16 +253,16 @@ func _randomize_positions():
 		if is_instance_valid(org):
 			org.position = _rand_pos() 
 
-func _apply_antibiotic(name: String):
+func _apply_antibiotic(ord_name: String):
 	# Check if ordnance is unlocked
-	if not _is_ordnance_unlocked(name):
-		print("Ordnance '%s' not yet available. Unlocks at cycle %d" % [name, _get_unlock_cycle_for_ordnance(name)])
+	if not _is_ordnance_unlocked(ord_name):
+		print("Ordnance '%s' not yet available. Unlocks at cycle %d" % [ord_name, _get_unlock_cycle_for_ordnance(name)])
 		return
 
 	# Ordnance strike targeting zombie horde
 	if generation - last_dose_gen < GENERATIONS_PER_DOSE:
 		return
-	match name:
+	match ord_name:
 		"Fire": audio.stream = FIRE_SOUND
 		"Electricity": audio.stream = ELECTRICITY_SOUND
 		"Acid": audio.stream = ACID_SOUND
@@ -269,7 +270,7 @@ func _apply_antibiotic(name: String):
 		"Freeze": audio.stream = FREEZE_SOUND
 	audio.play()
 	last_dose_gen = generation
-	dose_label.text = "Last Strike: %s" % name
+	dose_label.text = "Last Strike: %s" % ord_name
 
 	# Track zombies before strike
 	var zombies_before = population.size()
