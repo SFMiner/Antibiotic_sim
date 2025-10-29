@@ -204,6 +204,7 @@ func _apply_antibiotic(name: String):
 		var most_recent = cycle_stats[cycle_stats.size() - 1]
 		most_recent["strike"] = name
 		most_recent["killed"] = killed
+		most_recent["population_before_strike"] = zombies_before
 
 	_update_ui()
 	_update_stats_display()
@@ -223,7 +224,12 @@ func _update_stats_display():
 		text += "Cycle %d: %d zombies\n" % [stat["cycle"], stat["zombie_count"]]
 		if stat["strike"] != null:
 			text += "  → Strike: %s\n" % stat["strike"]
-			text += "  → Eliminated: %d\n" % stat["killed"]
+			var pop_before = stat.get("population_before_strike", 0)
+			if pop_before > 0:
+				var percentage = (stat["killed"] * 100.0) / pop_before
+				text += "  → Eliminated: %d (%.1f%%)\n" % [stat["killed"], percentage]
+			else:
+				text += "  → Eliminated: %d\n" % stat["killed"]
 		text += "\n"
 	stats_label.text = text
 
