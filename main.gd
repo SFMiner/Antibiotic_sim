@@ -29,6 +29,8 @@ const GENERATIONS_PER_DOSE := 1
 const BASE_DEATH_CHANCE := 0.598
 # Random survivor defense per infection cycle (natural attrition)
 const SURVIVOR_DEFENSE := 15
+# Cycles between unlocking new ordnance types
+const ORDNANCE_UNLOCK_INTERVAL := 10
 
 @onready var bacteria_layer: Node2D = $BacteriaLayer
 @onready var gen_label: Label = $UI/TopPanel/HBoxContainer/GenerationLabel
@@ -67,6 +69,9 @@ var antibiotic_config = preload("res://antibiotics_config.gd")
 var genetic_system = preload("res://genetic_system.gd")
 var organism_scene: PackedScene = preload("res://organism.tscn")
 
+# Ordnance progression: unlocked in order, one every ORDNANCE_UNLOCK_INTERVAL cycles
+var ordnance_sequence: Array = ["Fire", "Shrapnel", "Acid", "Electricity", "Freeze"]
+
 func _ready() -> void:
 	augamentin_button.pressed.connect(func(): _apply_antibiotic(augamentin_button.text))
 	ceph1_button.pressed.connect(func(): _apply_antibiotic(ceph1_button.text))
@@ -82,6 +87,26 @@ func _ready() -> void:
 
 	_spawn_initial_population()
 	_update_ui()
+	_update_ordnance_buttons()
+
+func _get_unlock_cycle_for_ordnance(ordnance: String) -> int:
+	# Returns the cycle at which an ordnance becomes available
+	var index = ordnance_sequence.find(ordnance)
+	if index == -1:
+		return 999  # Never unlock if not in sequence
+	return index * ORDNANCE_UNLOCK_INTERVAL
+
+func _is_ordnance_unlocked(ordnance: String) -> bool:
+	# Check if an ordnance is currently available
+	return generation >= _get_unlock_cycle_for_ordnance(ordnance)
+
+func _update_ordnance_buttons():
+	# Update button states based on unlocked ordnance types
+	augamentin_button.disabled = !_is_ordnance_unlocked("Fire")
+	ceph1_button.disabled = !_is_ordnance_unlocked("Shrapnel")
+	ceph2_button.disabled = !_is_ordnance_unlocked("Acid")
+	tetra_button.disabled = !_is_ordnance_unlocked("Electricity")
+	cipro_button.disabled = !_is_ordnance_unlocked("Freeze")
 
 func _spawn_initial_population():
 	# Seed initial population with at least one zombie of each toughness type
@@ -117,6 +142,14 @@ func _spawn_initial_population():
 func _next_generation():
 	print("DEBUG: Next Generation button clicked!")
 	generation += 1
+
+	# Check if new ordnance unlocked at this cycle
+	var newly_unlocked_ordnance: Array = []
+	for ordnance in ordnance_sequence:
+		var unlock_cycle = _get_unlock_cycle_for_ordnance(ordnance)
+		if generation == unlock_cycle:
+			newly_unlocked_ordnance.append(ordnance)
+
 	population = genetic_system.reproduce_population(bacteria_layer, organism_scene, population, POPULATION_CAP)
 	_apply_survivor_defense()
 	_randomize_positions()
@@ -129,6 +162,8 @@ func _next_generation():
 		"strike": null,
 		"killed": 0
 	}
+	if newly_unlocked_ordnance.size() > 0:
+		cycle_entry["new_ordnance"] = newly_unlocked_ordnance
 	cycle_stats.append(cycle_entry)
 
 	# Debug: Track resistance evolution
@@ -146,7 +181,12 @@ func _next_generation():
 		avg_toughness["Electricity"], avg_toughness["Freeze"]
 	])
 
+	# Notify player of newly unlocked ordnance
+	if newly_unlocked_ordnance.size() > 0:
+		print("*** NEW ORDNANCE AVAILABLE: %s ***" % ", ".join(newly_unlocked_ordnance))
+
 	_update_ui()
+	_update_ordnance_buttons()
 	_update_stats_display()
 
 func _apply_survivor_defense():
@@ -172,6 +212,11 @@ func _randomize_positions():
 			org.position = _rand_pos() 
 
 func _apply_antibiotic(name: String):
+	# Check if ordnance is unlocked
+	if not _is_ordnance_unlocked(name):
+		print("Ordnance '%s' not yet available. Unlocks at cycle %d" % [name, _get_unlock_cycle_for_ordnance(name)])
+		return
+
 	# Ordnance strike targeting zombie horde
 	match name:
 		"Fire": audio.stream = FIRE_SOUND
@@ -222,6 +267,12 @@ func _update_stats_display():
 	var text = "=== INFECTION LOG ===\n\n"
 	for stat in cycle_stats:
 		text += "Cycle %d: %d zombies\n" % [stat["cycle"], stat["zombie_count"]]
+
+		# Show newly unlocked ordnance
+		if stat.has("new_ordnance"):
+			var ordnance_list = stat["new_ordnance"]
+			text += "  ★ NEW ORDNANCE: %s\n" % ", ".join(ordnance_list)
+
 		if stat["strike"] != null:
 			text += "  → Strike: %s\n" % stat["strike"]
 			var pop_before = stat.get("population_before_strike", 0)
