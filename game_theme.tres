@@ -1,91 +1,91 @@
 [gd_resource type="Theme" load_steps=8 format=3 uid="uid://b1v8u45t0nlq"]
 
-[ext_resource type="FontFile" uid="uid://c3h0gksdg5k2l" path="res://title_font.ttf" id="1_7d4dq"]
+[ext_resource type="FontFile" uid="uid://c3h0gksdg5k2l" path="res://title_font.ttf" id="1"]
 
-[sub_resource type="StyleBoxFlat" id="button_normal"]
-bg_color = Color(0.9, 0.75, 0.9, 1.0)
+[sub_resource type="StyleBoxFlat" id="ButtonNormal"]
+bg_color = Color(0.9, 0.75, 0.9, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+border_color = Color(0.8, 0.6, 0.8, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.8, 0.6, 0.8, 1.0)
 
-[sub_resource type="StyleBoxFlat" id="button_hover"]
-bg_color = Color(0.95, 0.82, 0.95, 1.0)
+[sub_resource type="StyleBoxFlat" id="ButtonHover"]
+bg_color = Color(0.95, 0.82, 0.95, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+border_color = Color(0.75, 0.55, 0.75, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.75, 0.55, 0.75, 1.0)
 
-[sub_resource type="StyleBoxFlat" id="button_pressed"]
-bg_color = Color(0.85, 0.65, 0.85, 1.0)
+[sub_resource type="StyleBoxFlat" id="ButtonPressed"]
+bg_color = Color(0.85, 0.65, 0.85, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+border_color = Color(0.7, 0.5, 0.7, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.7, 0.5, 0.7, 1.0)
 
-[sub_resource type="StyleBoxFlat" id="button_disabled"]
+[sub_resource type="StyleBoxFlat" id="ButtonDisabled"]
 bg_color = Color(0.85, 0.85, 0.85, 0.6)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+border_color = Color(0.7, 0.7, 0.7, 0.6)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.7, 0.7, 0.7, 0.6)
 
-[sub_resource type="StyleBoxFlat" id="panel_container"]
-bg_color = Color(0.75, 0.9, 0.8, 1.0)
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.75, 0.9, 0.8, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+border_color = Color(0.6, 0.8, 0.65, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.6, 0.8, 0.65, 1.0)
 
-[sub_resource type="StyleBoxFlat" id="checkbox_normal"]
-bg_color = Color(0.9, 0.75, 0.9, 1.0)
+[sub_resource type="StyleBoxFlat" id="CheckBoxStyle"]
+bg_color = Color(0.9, 0.75, 0.9, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+border_color = Color(0.8, 0.6, 0.8, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.8, 0.6, 0.8, 1.0)
 
 [resource]
-resource_name = "GameTheme"
-font_sizes/font_size = 16
-button/styles/normal = SubResource("button_normal")
-button/styles/hover = SubResource("button_hover")
-button/styles/pressed = SubResource("button_pressed")
-button/styles/disabled = SubResource("button_disabled")
-button/fonts/font = ExtResource("1_7d4dq")
-button/font_sizes/font_size = 18
-panel_container/styles/panel = SubResource("panel_container")
-checkbox/styles/normal = SubResource("checkbox_normal")
-checkbox/fonts/font = ExtResource("1_7d4dq")
-checkbox/font_sizes/font_size = 14
-label/fonts/font = ExtResource("1_7d4dq")
-label/font_sizes/font_size = 14
+default_font = ExtResource("1")
+default_font_size = 16
+Button/fonts/font = ExtResource("1")
+Button/font_sizes/font_size = 18
+Button/styles/normal = SubResource("ButtonNormal")
+Button/styles/hover = SubResource("ButtonHover")
+Button/styles/pressed = SubResource("ButtonPressed")
+Button/styles/disabled = SubResource("ButtonDisabled")
+CheckBox/fonts/font = ExtResource("1")
+CheckBox/font_sizes/font_size = 14
+CheckBox/styles/unchecked = SubResource("CheckBoxStyle")
+PanelContainer/styles/panel = SubResource("PanelStyle")
+Label/fonts/font = ExtResource("1")
+Label/font_sizes/font_size = 14
