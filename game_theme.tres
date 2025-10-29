@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://b1v8u45t0nlq"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://b1v8u45t0nlq"]
 
 [ext_resource type="FontFile" uid="uid://c3h0gksdg5k2l" path="res://title_font.ttf" id="1_7d4dq"]
 
@@ -74,6 +74,7 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.8, 0.6, 0.8, 1.0)
 
+[resource]
 resource_name = "GameTheme"
 font_sizes/font_size = 16
 button/styles/normal = SubResource("button_normal")
