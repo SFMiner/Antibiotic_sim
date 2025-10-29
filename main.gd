@@ -1,15 +1,15 @@
 # FINAL TESTING CHECKLIST:
-# [ ] All UI shows zombie/ordnance terminology
-# [ ] Zombies spawn and are visible
-# [ ] Color modulation shows toughness correctly
-# [ ] Statistics panel tracks cycles and strikes
-# [ ] Graph displays ordnance toughness levels
-# [ ] All 5 ordnance types work correctly
-# [ ] Cross-toughness (Shrapnel/Acid) functions
-# [ ] Performance good with 1000 zombies
-# [ ] No console errors or warnings
+# [X] All UI shows zombie/ordnance terminology
+# [X] Zombies spawn and are visible
+# [?] Color modulation shows toughness correctly
+# [X] Statistics panel tracks cycles and strikes
+# [X] Graph displays ordnance toughness levels
+# [X] All 5 ordnance types work correctly
+# [?] Cross-toughness (Shrapnel/Acid) functions
+# [X] Performance good with 1000 zombies
+# [X] No console errors or warnings
 # [ ] Statistics panel auto-scrolls to bottom
-# [ ] Toggle button switches between Show/Hide Stats
+# [X] Toggle button switches between Show/Hide Stats
 
 extends Control
 
@@ -26,7 +26,7 @@ const START_POP := 400
 # Infection cycles between ordnance strikes (1 = every round)
 const GENERATIONS_PER_DOSE := 1
 # Base casualty rate from ordnance (without toughness)
-const BASE_DEATH_CHANCE := 0.598
+const BASE_DEATH_CHANCE := 0.5# 0.598
 # Random survivor defense per infection cycle (natural attrition)
 const SURVIVOR_DEFENSE := 15
 # Cycles between unlocking new ordnance types
@@ -60,7 +60,7 @@ const ORDNANCE_UNLOCK_INTERVAL := 10
 @onready var regular_restart_button: Button = $UI/SuccessScreen/PanelContainer/VBoxContainer/HBoxContainer/RegularButton
 @onready var sandbox_restart_button: Button = $UI/SuccessScreen/PanelContainer/VBoxContainer/HBoxContainer/SandboxButton
 
-@onready var auto_cycle_checkbox: CheckBox = $UI/Buttons/AutoCycleCheckbox
+@onready var auto_cycle_checkbox: CheckBox = $UI/AutoCycleCheckbox
 
 # Zombie horde
 var population: Array = []
@@ -96,7 +96,7 @@ func _ready() -> void:
 
 	# Statistics panel toggle
 	stats_toggle.pressed.connect(_toggle_stats_panel)
-	stats_scroll.visible = false  # Start collapsed
+	stats_scroll.visible = true  # Start collapsed
 
 	# Success screen buttons
 	regular_restart_button.pressed.connect(func(): _restart_game(false))
@@ -158,6 +158,16 @@ func _spawn_initial_population():
 		resistance_count["Fire"], resistance_count["Shrapnel"], resistance_count["Acid"],
 		resistance_count["Electricity"], resistance_count["Freeze"]
 	])
+
+	# Create initial cycle entry for generation 0
+	var initial_cycle = {
+		"cycle": 0,
+		"zombie_count": population.size(),
+		"strike": null,
+		"killed": 0
+	}
+	cycle_stats.append(initial_cycle)
+	_update_stats_display()
 
 func _next_generation():
 	print("DEBUG: Next Generation button clicked!")
@@ -296,7 +306,7 @@ func _update_ui():
 
 func _toggle_stats_panel():
 	stats_scroll.visible = !stats_scroll.visible
-	stats_toggle.text = "Hide Stats" if stats_scroll.visible else "Show Stats"
+	stats_toggle.text = "Show Stats" if stats_scroll.visible else "Hide Stats"
 
 func _update_stats_display():
 	# Format cycle-by-cycle statistics for display
