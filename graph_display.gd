@@ -20,9 +20,9 @@ func update_graph(population: Array):
 		return
 	for org in population:
 		for ord_name in COLORS.keys():
-			avg[name] += org.resistances[name]
+			avg[ord_name] += org.resistances[ord_name]
 	for ord_name in COLORS.keys():
-		avg[name] /= float(population.size())
+		avg[ord_name] /= float(population.size())
 	history.append(avg)
 	if history.size() > 100:
 		history.pop_front()
@@ -32,7 +32,7 @@ func _draw():
 	var step_x = size.x / max(1, history.size())
 	for i in range(1, history.size()):
 		for ord_name in COLORS.keys():
-			var c = COLORS[name]
-			var y_prev = size.y - (history[i - 1][name] * 50)
-			var y_cur = size.y - (history[i][name] * 50)
+			var c = COLORS[ord_name]
+			var y_prev = size.y - (history[i - 1][ord_name] * 50)
+			var y_cur = size.y - (history[i][ord_name] * 50)
 			draw_line(Vector2((i - 1) * step_x, y_prev), Vector2(i * step_x, y_cur), c, 2)

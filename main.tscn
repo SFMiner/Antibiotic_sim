@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c2wk2utcstiyn"]
+[gd_scene load_steps=12 format=3 uid="uid://c2wk2utcstiyn"]
 
 [ext_resource type="Script" uid="uid://cc77jpsqewtw0" path="res://main.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgtb2uaig3ep4" path="res://graph_display.gd" id="3"]
@@ -9,19 +9,16 @@
 [ext_resource type="AudioStream" uid="uid://ckt0ccqdef8cj" path="res://zombie-moans-29924.mp3" id="7_kek77"]
 [ext_resource type="Theme" uid="uid://b1v8u45t0nlq" path="res://game_theme.tres" id="8_abcde"]
 
+[sub_resource type="Theme" id="Theme_5vw27"]
+
+[sub_resource type="SystemFont" id="SystemFont_kek77"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mycd"]
 bg_color = Color(1, 0.69803923, 1, 0.44313726)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_272bh"]
-bg_color = Color(0.58132786, 0.003506614, 0.9157049, 1)
-border_width_left = 3
-border_width_top = 2
-border_width_right = 3
-border_width_bottom = 3
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -56,30 +53,36 @@ offset_top = 32.0
 offset_right = 1057.0
 offset_bottom = 360.0
 mouse_filter = 2
+theme = ExtResource("8_abcde")
 
 [node name="FireButton" type="Button" parent="UI/Buttons"]
 modulate = Color(0.8156863, 0, 0, 1)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.27798206, 0.046134144, 0.30378628, 1)
 text = "Fire"
 
 [node name="ShrapnelButton" type="Button" parent="UI/Buttons"]
 modulate = Color(0.762211, 0.00068615197, 0.805572, 1)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.3775445, 0.07739381, 0.41097867, 1)
 text = "Shrapnel"
 
 [node name="AcidButton" type="Button" parent="UI/Buttons"]
 modulate = Color(0.4, 0.8, 0.3, 1)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.5044714, 0.12167797, 0.5472519, 1)
 text = "Acid"
 
 [node name="ElectricityButton" type="Button" parent="UI/Buttons"]
 modulate = Color(0.59, 0.648, 0, 1)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.567, 0.148, 0.616, 1)
 text = "Electricity"
 
 [node name="FreezeButton" type="Button" parent="UI/Buttons"]
 modulate = Color(0.5, 0.75, 0.95, 1)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.567, 0.148, 0.616, 1)
 text = "Freeze"
 
 [node name="Spacer" type="Container" parent="UI/Buttons"]
@@ -97,6 +100,7 @@ layout_mode = 2
 [node name="TopPanel" type="PanelContainer" parent="UI"]
 offset_right = 40.0
 offset_bottom = 40.0
+theme = ExtResource("8_abcde")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/TopPanel"]
 layout_mode = 2
@@ -115,6 +119,7 @@ offset_left = 850.0
 offset_top = 355.0
 offset_right = 1085.0
 offset_bottom = 640.0
+theme = SubResource("Theme_5vw27")
 
 [node name="GraphDisplay" type="Control" parent="UI/Panel"]
 anchors_preset = 0
@@ -127,6 +132,7 @@ script = ExtResource("3")
 offset_top = 50.0
 offset_right = 250.0
 offset_bottom = 650.0
+theme = ExtResource("8_abcde")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/LeftPanel"]
 layout_mode = 2
@@ -144,6 +150,7 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = SubResource("SystemFont_kek77")
 text = "=== INFECTION LOG ===
 
 Cycle data will appear here..."
@@ -252,6 +259,7 @@ offset_right = 992.0
 offset_bottom = 526.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("8_abcde")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/SuccessScreen/PanelContainer"]
 layout_mode = 2
