@@ -56,6 +56,10 @@ const ORDNANCE_UNLOCK_INTERVAL := 10
 @onready var stats_scroll: ScrollContainer = $UI/LeftPanel/VBoxContainer/StatsScroll
 @onready var stats_label: Label = $UI/LeftPanel/VBoxContainer/StatsScroll/StatsLabel
 
+@onready var success_screen: Node2D = $UI/SuccessScreen
+@onready var regular_restart_button: Button = $UI/SuccessScreen/PanelContainer/VBoxContainer/HBoxContainer/RegularButton
+@onready var sandbox_restart_button: Button = $UI/SuccessScreen/PanelContainer/VBoxContainer/HBoxContainer/SandboxButton
+
 # Zombie horde
 var population: Array = []
 # Current infection cycle number
@@ -64,6 +68,9 @@ var generation := 0
 var last_dose_gen := -GENERATIONS_PER_DOSE
 # Statistics tracking: array of cycle data dictionaries
 var cycle_stats: Array = []
+# Game mode: true for sandbox (all ordnance available), false for regular (staged unlock)
+# Using static so it persists across scene reloads
+static var sandbox_mode := false
 
 var antibiotic_config = preload("res://antibiotics_config.gd")
 var genetic_system = preload("res://genetic_system.gd")
@@ -85,6 +92,10 @@ func _ready() -> void:
 	stats_toggle.pressed.connect(_toggle_stats_panel)
 	stats_scroll.visible = false  # Start collapsed
 
+	# Success screen buttons
+	regular_restart_button.pressed.connect(func(): _restart_game(false))
+	sandbox_restart_button.pressed.connect(func(): _restart_game(true))
+
 	_spawn_initial_population()
 	_update_ui()
 	_update_ordnance_buttons()
@@ -97,6 +108,9 @@ func _get_unlock_cycle_for_ordnance(ordnance: String) -> int:
 	return index * ORDNANCE_UNLOCK_INTERVAL
 
 func _is_ordnance_unlocked(ordnance: String) -> bool:
+	# In sandbox mode, all ordnance is available immediately
+	if sandbox_mode:
+		return true
 	# Check if an ordnance is currently available
 	return generation >= _get_unlock_cycle_for_ordnance(ordnance)
 
@@ -188,6 +202,13 @@ func _next_generation():
 	_update_ui()
 	_update_ordnance_buttons()
 	_update_stats_display()
+	_check_victory()
+
+func _check_victory():
+	# Check if all zombies have been eliminated
+	if population.size() == 0:
+		print("=== VICTORY! HORDE ELIMINATED ===")
+		success_screen.visible = true
 
 func _apply_survivor_defense():
 	# Random zombie casualties per infection cycle (natural attrition from environment)
@@ -203,6 +224,8 @@ func _apply_survivor_defense():
 			org.queue_free()
 
 func _start_game():
+	# Reset sandbox mode when starting fresh from title screen
+	sandbox_mode = false
 	title_page.visible = false
 	buttons.visible = true
 
@@ -218,6 +241,8 @@ func _apply_antibiotic(name: String):
 		return
 
 	# Ordnance strike targeting zombie horde
+	if generation - last_dose_gen < GENERATIONS_PER_DOSE:
+		return
 	match name:
 		"Fire": audio.stream = FIRE_SOUND
 		"Electricity": audio.stream = ELECTRICITY_SOUND
@@ -225,8 +250,6 @@ func _apply_antibiotic(name: String):
 		"Shrapnel": audio.stream = SHRAPNEL_SOUND
 		"Freeze": audio.stream = FREEZE_SOUND
 	audio.play()
-	if generation - last_dose_gen < GENERATIONS_PER_DOSE:
-		return
 	last_dose_gen = generation
 	dose_label.text = "Last Strike: %s" % name
 
@@ -253,6 +276,7 @@ func _apply_antibiotic(name: String):
 
 	_update_ui()
 	_update_stats_display()
+	_check_victory()
 
 func _update_ui():
 	gen_label.text = "Infection Cycle: %d" % generation
@@ -291,3 +315,8 @@ func _update_stats_display():
 func _rand_pos() -> Vector2:
 	# Keep within a safe margin of the 1280x720 window (adjust if you change resolution)
 	return Vector2(randi_range(30, 1250), randi_range(90, 680))
+
+func _restart_game(sandbox: bool):
+	# Set game mode and reload the scene
+	sandbox_mode = sandbox
+	get_tree().reload_current_scene()
